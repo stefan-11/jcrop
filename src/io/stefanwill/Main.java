@@ -2,10 +2,8 @@ package io.stefanwill;
 
 import io.stefanwill.jcrop.JCrop;
 
+import java.awt.*;
 import java.awt.image.BufferedImage; // I think
-import java.awt.Rectangle;
-import java.awt.Color;
-import java.awt.Graphics;
 import javax.imageio.*;
 import java.io.*;
 
@@ -27,16 +25,11 @@ public class Main {
         BufferedImage img = null;
         BufferedImage targetImg = null;
 
+        //load it
         try {
-            img = ImageIO.read(new File("SW_HI_2013-06-30_19-05-10_eos450d_IMG_1314.jpg"));
+            img = ImageIO.read(new File("landscape.jpg"));
 
             System.out.println("got it");
-
-            Rectangle croppedRect = new Rectangle(500, 500);
-
-            targetImg = cropper.crop(img, croppedRect);
-
-            System.out.println("cropped");
 
         } catch (IOException e) {
             System.out.println("IOException aufgetreten");
@@ -44,11 +37,44 @@ public class Main {
 
 
 
-        //write the image to a file
+        //resize it
+        try {
+            System.out.println("resizing...");
+            img = JCrop.resize(img, 2848, 2848);
+            System.out.println("done");
+        } catch (Exception e) {
+            System.out.println("Exception aufgetreten");
+            e.printStackTrace();
+        }
+
+
+        //crop it
         try {
 
-            File outputfile = new File("saved.jpg");
+            Rectangle croppedRect = new Rectangle(500, 500);
+
+            targetImg = cropper.crop(img, croppedRect);
+
+            System.out.println("cropped");
+
+        } catch (Exception e) {
+            System.out.println("Exception aufgetreten");
+        }
+
+
+
+
+        //write the image to a file
+        try {
+            if (targetImg == null){
+                System.out.println("defaulting targetImg to img");
+                targetImg = img;
+            }
+
+            System.out.println("saving cropped image");
+            File outputfile = new File("saved-landscape.jpg");
             ImageIO.write(targetImg, "jpg", outputfile);
+            System.out.println("done");
         } catch (IOException e) {
             System.out.println("IOException aufgetreten während dem schreiben");
         }
