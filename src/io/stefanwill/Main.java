@@ -15,8 +15,6 @@ public class Main {
 	    // write your code here
         System.out.println("hello world!");
 
-        Main main = new Main();
-
         BufferedImage img = null;
         BufferedImage targetImg = null;
 
@@ -64,7 +62,7 @@ public class Main {
 
 
 
-        targetImg = main.createThumbnail(img);
+        targetImg = Main.createThumbnail(img);
 
 
         //write the image to a file
@@ -89,7 +87,7 @@ public class Main {
     }
 
 
-    public BufferedImage createThumbnail(BufferedImage img){
+    public static BufferedImage createThumbnail(BufferedImage img){
 
         //widht/height of the original image
         int imageWidth = img.getWidth();
@@ -105,52 +103,61 @@ public class Main {
         int resizedWidth = 0;
 
 
-
+        /*
         System.out.println("width");
         System.out.println(imageWidth);
         System.out.println("height");
         System.out.println(imageHeight);
-
+        */
 
         //if height is bigger than width we have a portrait image
         //calculate the scaling factor depending on the short edge of the image
         if (imageHeight > imageWidth){
             System.out.println("image is portrait");
-
+            /*
             System.out.println("thumbWidth: ");
             System.out.println(thumbWidth);
             System.out.println("imageWidth: ");
             System.out.println(imageWidth);
+            */
             scalingFactor = (double) thumbWidth / (double) imageWidth;
 
         } else {
             System.out.println("image is landscape");
-
+            /*
             System.out.println("thumbHeight: ");
             System.out.println(thumbHeight);
             System.out.println("imageHeight: ");
             System.out.println(imageHeight);
+            */
             scalingFactor = (double) thumbHeight / (double) imageHeight;
 
         }
+
+        /*
         System.out.println("scalingFactor");
         System.out.println(scalingFactor);
+        */
 
         //recalculate height/width of the thumbnail (should be same as thumbWidth/thumbHeight)
         resizedHeigth = (int) (imageHeight * scalingFactor);
+        /*
         System.out.println("resizedHeight:");
         System.out.println(resizedHeigth);
+        */
 
         resizedWidth = (int) (imageWidth * scalingFactor);
+        /*
         System.out.println("resizedWidth:");
         System.out.println(resizedWidth);
+        */
 
         //resize it
         try {
-            System.out.println("resizing...");
+            //System.out.println("resizing...");
             //now resize the image
             img = JCrop.resize(img, resizedWidth, resizedHeigth);
-            System.out.println("done");
+            //System.out.println("done");
         } catch (Exception e) {
             System.out.println("Exception aufgetreten");
             e.printStackTrace();
@@ -161,21 +168,27 @@ public class Main {
         try {
 
             Rectangle croppedRect = new Rectangle(thumbWidth, thumbHeight);
+            /*
             System.out.println("croppedRect");
             System.out.println(croppedRect);
+            */
 
             int originX = (resizedWidth / 2) - (thumbWidth / 2);
+            /*
             System.out.println("originX");
             System.out.println(originX);
+            */
 
             int originY = (resizedHeigth / 2) - (thumbHeight / 2);
+            /*
             System.out.println("originY");
             System.out.println(originY);
+            */
 
             //now crop the image
             img = JCrop.crop(img, croppedRect, originX, originY);
 
-            System.out.println("cropped");
+            //System.out.println("cropped");
 
         } catch (Exception e) {
             System.out.println("Exception aufgetreten");
