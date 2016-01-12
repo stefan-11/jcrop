@@ -13,9 +13,9 @@ import java.nio.file.Paths;
  * Created by stefan on 11.01.16.
  *
  * Usage Example:
- * java io.stefanwill.CreateThumbnailsInFolder ../../../ ../../../
+ * java io.stefanwill.CreateThumbnailsInFolder ../../../
  *
- * Paths can be specified relative or absolute
+ * Path can be specified relative or absolute
  *
  *
  */
@@ -25,12 +25,19 @@ public class CreateThumbnailsInFolder {
 
 
 
-        if (args.length < 2){
+        if (args.length < 1){
             System.out.println("Usage:");
-            System.out.println("CreateThumbnailsInFolder <sourcedir> <targetdir>");
+            System.out.println("CreateThumbnailsInFolder <sourcedir>");
             System.out.println("");
-            System.out.println("Example with relative paths:");
-            System.out.println("java io.stefanwill.CreateThumbnailsInFolder ../../../ ../../../ ");
+            System.out.println("Example with relative path:");
+            System.out.println("java -jar CreateThumbnailsInFolder.jar ../../../");
+            System.out.println("java -jar CreateThumbnailsInFolder.jar ../galleries/2015-05-09-Ihringen/");
+            System.out.println("");
+            System.out.println("development mode:");
+            System.out.println("java io.stefanwill.CreateThumbnailsInFolder ../../../");
+            System.out.println("");
+            System.out.println("A sub directory thumbs will be created in the specified folder");
+            System.out.println("");
 
             return;
         }
@@ -38,21 +45,33 @@ public class CreateThumbnailsInFolder {
 
         String sourceFilenameWithPath = args[0];
 
-        String targetFilenameWithPath = args[1];
+        //target directory is a subdirectory thumbs in the source folder
+        String targetFilenameWithPath = sourceFilenameWithPath.concat("thumbs");
 
         //check if sourceFilename exists
         Path sourcePath = Paths.get(sourceFilenameWithPath);
 
-        if (sourcePath.getFileName().toFile().isDirectory() == false){
-            System.out.println("Sourcepath is not a directory.");
+        if (sourcePath.toFile().isDirectory() == false){
+            System.out.println("sourcePath is not a directory.");
+            System.out.println(sourcePath);
+            System.out.println(sourcePath.getFileName().toString());
+            System.out.println(sourcePath.toFile().isDirectory());
+            System.out.println(sourcePath.toFile().exists());
             return;
         }
 
+
         //check if targetFilename exists (it should not)
         Path targetPath = Paths.get(targetFilenameWithPath);
-
+        /*
         if (targetPath.getFileName().toFile().isDirectory() == false){
             System.out.println("targetPath is not a directory.");
+        }
+        */
+        if (targetPath.toFile().exists() == false){
+            System.out.println("creating sub directory thumbs");
+
+            targetPath.toFile().mkdir();
         }
 
 
